@@ -1,0 +1,47 @@
+.home{
+    width:400px;
+}
+
+.home .logo{
+  width: 100%;
+  text-align: center;
+  margin:3rem 0;
+}
+
+.home .form__control{
+    display:block;
+    padding:0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    width:100%;
+    color:var(--text-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.home .invalid__feedback{
+   color:var(--danger-color);
+   padding:0 0.5rem;
+}
+
+.home .form__control:focus{
+   outline:var(--secondary-color);
+   border: 2px solid var(--secondary-color);
+}
+
+.home .startBtn{
+    margin-top: 0.5rem;
+    padding:0.5rem 1rem;
+    background:var(--secondary-color);
+    color: var(--text-color);
+    border:none;
+    border-radius: 5px;
+    width:100%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width:415px){
+.home{
+    width: 95%;
+}
+}
