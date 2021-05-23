@@ -29,7 +29,7 @@ const Result = () => {
 
       <div className="leaderboard">
           <div className="leaderboard__heading">
-            <i className="fas fa-trophy"></i><span style={{marginLeft:"2px"}}>LEADERBOARD</span>
+            <i className="fas fa-trophy"></i>{" "}LEADERBOARD
           </div>
           {filteredLeaderboard?.map((item:Leaderboard,index:number) => (
             <div className="card" key={item._id}>
