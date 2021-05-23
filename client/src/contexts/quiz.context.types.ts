@@ -1,3 +1,5 @@
+import { Dispatch } from "react"
+
 export type Option = {
     _id:string;
     text: string;
@@ -33,3 +35,25 @@ export type Option = {
  export type Props = {
     children?:React.ReactNode
 }
+
+export type ContextAction = 
+| { type:"SETQUIZ"; payload:{quiz:Quiz[];} }
+| { type:"INCREMENT_SCORE"; payload:{score:number;} }
+| { type:"NEXT_QUESTION"; payload:{currentQuestionNo:number;} }
+| { type:"RESET";}
+
+export type ContextState = {
+    quiz:Quiz[];
+    score:number;
+    currentQuestionNo:number;
+}
+
+export type ContextType = {
+    quiz:Quiz[];
+    score:number;
+    currentQuestionNo:number;
+    dispatch?:Dispatch<ContextAction>
+}
+
+
+

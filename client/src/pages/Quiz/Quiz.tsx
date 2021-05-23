@@ -1,17 +1,19 @@
 import { useParams,useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useReducer, useState } from "react";
-import { State,Params,Location } from "./Question.types";
+import { useEffect, useState } from "react";
+import { Location } from "./Quiz.types";
 
-import "./Question.css";
+import "./Quiz.css";
 import { useQuiz } from "../../contexts/quiz.context";
 import { getLeaderboard } from "../../services/quiz.services";
 import Options from "../../components/Options/Options";
-import { quizReducer } from "../../Reducers/quiz.reducer";
+import Question from "../../components/Question/Question";
+import Timer from "../../components/Timer/Timer";
 
-const Question = () => {
-    const {quizID}:Params = useParams();
+const Quiz = () => {
+    const quizID:string = useParams()?.quizID;
 
-    const {quiz} = useQuiz();
+    const {quiz,score,currentQuestionNo,dispatch} = useQuiz();
+    
     const currentQuiz = quiz?.find( q => q._id === quizID );
 
     const [time,setTime] = useState<number>(30);
@@ -25,7 +27,7 @@ const Question = () => {
        let timer = 30;
        function timeout(){
           setIsClicked(true);
-          setStopTime(true)
+          setStopTime(true);
        }
 
        let a = setInterval(() => {
@@ -49,18 +51,13 @@ const Question = () => {
     
     const [isClicked,setIsClicked] = useState<boolean|number>(false);
 
-    const initialState:State = {
-       score:0,
-       currentQuestionNo:0
-    }
-
-    const [{score,currentQuestionNo},dispatch] = useReducer(quizReducer,initialState);
-
     function handleOption(isRight:boolean,i:number){
         if(isRight){
             setIsClicked(true);
             setStopTime(true);
-            dispatch({type:"INCREMENT_SCORE",payload:{score}});
+            if(dispatch){
+                dispatch({type:"INCREMENT_SCORE",payload:{score}});
+            }
         }
         else{
             setIsClicked(i)
@@ -69,7 +66,7 @@ const Question = () => {
     }
 
     const gameOver = async() => {
-            if(state?.name){
+            if(state?.name && score){
                 const res = await getLeaderboard(quizID,{name:state?.name,score})
                 if("leaderboard" in res){
                     return navigate("/result",{state:{score,leaderboard:res.leaderboard}})
@@ -79,12 +76,16 @@ const Question = () => {
     }
 
     const handleNextQues = async() => {
+        console.log("As");
+        
         setIsClicked(false);
         setStopTime(false);
-        if(currentQuiz?.questions.length === currentQuestionNo + 1){
+        if( currentQuestionNo && currentQuiz?.questions.length === currentQuestionNo + 1){
           gameOver();
         }
-        dispatch({type:"NEXT_QUESTION",payload:{currentQuestionNo}});
+        if(dispatch){
+            dispatch({type:"NEXT_QUESTION",payload:{currentQuestionNo}});
+        }
         setTime(30);
     }
 
@@ -93,21 +94,18 @@ const Question = () => {
     }
 
     return (
-        <div className="question">
-            
-            <div className="display__question__number">{currentQuestionNo + 1}/10</div>
-            <div className="timer__container">
-                <span className={time <=10 ? (time % 2 === 0 ? "timer darkRed" : "timer" )  :"timer"}>{time}</span>
-            </div>
-            <h3 className="question__heading">{currentQuiz?.questions[currentQuestionNo].question}</h3>
+        <div className="quiz">
+             <div className="display__question__number">{currentQuestionNo + 1}/10</div>
+             <Timer time={time}/>
+             <Question question={currentQuiz?.questions[currentQuestionNo].question}/>
              <Options currentQuiz={currentQuiz} currentQuestionNo={currentQuestionNo} isClicked={isClicked} handleOption={handleOption}/>
-            <h4 className="display__score">Current score : {score}</h4>
-            <div className="btn__container">
-              <button className="primary__btn" onClick={handleQuit}>QUIT</button> &nbsp;
-              <button className="primary__btn" disabled={isClicked === false} onClick={handleNextQues}>NEXT</button>
-            </div>
+             <h4 className="display__score">Current score : {score}</h4>
+             <div className="btn__container">
+                <button className="primary__btn" onClick={handleQuit}>QUIT</button> &nbsp;
+                <button className="primary__btn" disabled={isClicked === false} onClick={handleNextQues}>NEXT</button>
+             </div>
         </div>
     );
 };
 
-export default Question;
+export default Quiz;

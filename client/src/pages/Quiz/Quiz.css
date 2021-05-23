@@ -1,21 +1,21 @@
-.question{
+.quiz{
     width:90%;
     margin-top:3rem;
 }
 
-.display__question__number{
+.quiz .display__question__number{
    letter-spacing: 2px;
    font-weight:700;
    color: var(--text-color);
 }
 
-.question .timer__container{
+.quiz .timer__container{
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
-.question .timer{
+.quiz .timer{
     display:flex;
     justify-content:center;
     align-items:center;
@@ -27,22 +27,22 @@
     border:4px solid var(--text-color);
 }
 
-.question .darkRed{
+.quiz .darkRed{
     color:var(--dark-red-color);
     border:4px solid var(--dark-red-color);
 }
 
-.question__heading{
+.quiz__heading{
    color:var(--text-color)
 }
 
-.question .options__container{
+.quiz .options__container{
    display:grid;
    grid-template-columns: 1fr 1fr;
    gap:10px;
 }
 
-.question .option{
+.quiz .option{
     padding: 0.8rem;
     display: block;
     background:var(--tertiary-color);
@@ -66,11 +66,11 @@
     color:var(--tertiary-color)!important;
 }
 
-.question .display__score{
+.quiz .display__score{
     color:var(--text-color);
 }
 
-.question .btn__container{
+.quiz .btn__container{
     display:flex;
     justify-content:space-between;
 }
