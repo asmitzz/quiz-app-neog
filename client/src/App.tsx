@@ -1,4 +1,4 @@
-import Header from "./utils/Header/Header";
+import Header from "./components/Header/Header";
 import Home from "./pages/Home/Home";
 import Question from "./pages/Question/Question";
 import Result from "./pages/Result/Result";
