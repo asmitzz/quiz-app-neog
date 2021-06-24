@@ -76,12 +76,11 @@ const Quiz = () => {
     }
 
     const handleNextQues = async() => {
-        console.log("As");
-        
         setIsClicked(false);
         setStopTime(false);
         if( currentQuestionNo && currentQuiz?.questions.length === currentQuestionNo + 1){
           gameOver();
+          return;
         }
         if(dispatch){
             dispatch({type:"NEXT_QUESTION",payload:{currentQuestionNo}});

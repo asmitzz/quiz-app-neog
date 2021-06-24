@@ -40,7 +40,7 @@ export type ContextAction =
 | { type:"SETQUIZ"; payload:{quiz:Quiz[];} }
 | { type:"INCREMENT_SCORE"; payload:{score:number;} }
 | { type:"NEXT_QUESTION"; payload:{currentQuestionNo:number;} }
-| { type:"RESET";}
+| { type:"RESET_QUIZ";}
 
 export type ContextState = {
     quiz:Quiz[];
