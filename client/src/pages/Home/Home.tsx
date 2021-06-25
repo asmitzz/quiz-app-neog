@@ -13,7 +13,6 @@ const Home = () => {
     const [state,setState] = useState<State>({name:"",category:"default"});
     const [error,setError] = useState<State>({name:"",category:""});
     
-
     const navigate = useNavigate();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLSelectElement>): void => {

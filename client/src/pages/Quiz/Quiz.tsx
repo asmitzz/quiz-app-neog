@@ -75,7 +75,8 @@ const Quiz = () => {
                 setSpinner(true);
                 try {
                     const res = await getLeaderboard(quizID,{name:state?.name,score})
-                    if("leaderboard" in res){
+                    if("leaderboard" in res && dispatch){
+                       dispatch({type:"RESET_QUIZ"})
                        return navigate("/result",{state:{score,leaderboard:res.leaderboard}})
                     }
                     setSpinner(false);
@@ -88,8 +89,6 @@ const Quiz = () => {
     }
 
     const handleNextQues = async() => {
-        console.log("As");
-        
         setIsClicked(false);
         setStopTime(false);
         if( currentQuestionNo && currentQuiz?.questions.length === currentQuestionNo + 1){
@@ -103,7 +102,10 @@ const Quiz = () => {
     }
 
     const handleQuit = () => {
-        navigate(-1)
+        if(dispatch){
+            dispatch({type:"RESET_QUIZ"})
+            navigate(-1)
+        }
     }
 
     return (
