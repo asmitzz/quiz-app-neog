@@ -1,13 +1,16 @@
 import { useParams,useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Location } from "./Quiz.types";
-
-import "./Quiz.css";
 import { useQuiz } from "../../contexts/quiz.context";
 import { getLeaderboard } from "../../services/quiz.services";
+import {Error} from "../../utils/Toast/Toast";
+
+import Spinner from "../../utils/Spinner/Spinner";
 import Options from "../../components/Options/Options";
 import Question from "../../components/Question/Question";
 import Timer from "../../components/Timer/Timer";
+
+import "./Quiz.css";
 
 const Quiz = () => {
     const quizID:string = useParams()?.quizID;
@@ -18,6 +21,8 @@ const Quiz = () => {
 
     const [time,setTime] = useState<number>(30);
     const [stopTime,setStopTime] = useState<boolean>(false);
+    const [ spinner,setSpinner ] = useState<boolean>(false);
+    const [ error,setError ] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const location:Location = useLocation();
@@ -67,9 +72,16 @@ const Quiz = () => {
 
     const gameOver = async() => {
             if(state?.name && score){
-                const res = await getLeaderboard(quizID,{name:state?.name,score})
-                if("leaderboard" in res){
-                    return navigate("/result",{state:{score,leaderboard:res.leaderboard}})
+                setSpinner(true);
+                try {
+                    const res = await getLeaderboard(quizID,{name:state?.name,score})
+                    if("leaderboard" in res){
+                       return navigate("/result",{state:{score,leaderboard:res.leaderboard}})
+                    }
+                    setSpinner(false);
+                } catch (error) {
+                    setSpinner(false);
+                    setError(true);
                 }
             }
             return navigate("/result",{state:{score,leaderboard:[]}})
@@ -82,6 +94,7 @@ const Quiz = () => {
         setStopTime(false);
         if( currentQuestionNo && currentQuiz?.questions.length === currentQuestionNo + 1){
           gameOver();
+          return
         }
         if(dispatch){
             dispatch({type:"NEXT_QUESTION",payload:{currentQuestionNo}});
@@ -104,6 +117,9 @@ const Quiz = () => {
                 <button className="primary__btn" onClick={handleQuit}>QUIT</button> &nbsp;
                 <button className="primary__btn" disabled={isClicked === false} onClick={handleNextQues}>NEXT</button>
              </div>
+
+             <Spinner show={spinner}/>
+             <Error show={error} message={"something went wrong!!"}/>
         </div>
     );
 };
