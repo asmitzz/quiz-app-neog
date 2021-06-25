@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuiz } from "../../contexts/quiz.context";
 import { Leaderboard } from "../../contexts/quiz.context.types";
 
 import "./Result.css";
@@ -8,10 +9,18 @@ const Result = () => {
 
   const navigate = useNavigate();
   const location:Location = useLocation();
-  
+  const { dispatch } = useQuiz();
+
   const score = location.state?.score;
   const leaderboard = location.state?.leaderboard;
   const filteredLeaderboard = leaderboard?.sort((a,b) => b.score - a.score);
+  
+  const playAgain = () => {
+      if(dispatch){
+       dispatch({type:"RESET_QUIZ"})
+      }
+     navigate(-1)
+  }
 
   return (
     <div className="result">
@@ -22,7 +31,7 @@ const Result = () => {
         <button className="primary__btn" onClick={() => navigate("/")}>
           GO TO HOME
         </button>
-        <button className="primary__btn" onClick={() => navigate(-1)}>
+        <button className="primary__btn" onClick={playAgain}>
           PLAY AGAIN
         </button>
       </div>
